@@ -2,16 +2,16 @@
 #include <WiFiUdp.h>
 
 //set wifi credentials
-#define WIFI_USERNAME ""
-#define WIFI_PASSWORD ""
+#define WIFI_USERNAME "Arihant"
+#define WIFI_PASSWORD "arpit13579"
 #define UDP_PORT 4210
 
 // UDP
 WiFiUDP UDP;
-char packet[255];
 char reply[] = "packet received";
 
 void setup (){
+  pinMode(LED_BUILTIN, OUTPUT);
   //setup serial 
   Serial.begin(115200);
   Serial.println();
@@ -25,7 +25,7 @@ void setup (){
 
   //loop continue until wifi is connected
   while (WiFi.status() != WL_CONNECTED){
-    delay(100);
+    delay(1000);
     Serial.println("Trying...");  
   }
   
@@ -45,22 +45,52 @@ void setup (){
 void loop(){
 
   //if packet is received
-  int packetSize = UDP.parsePacket();
-  if (packetSize) { 
+  int p = UDP.parsePacket();
+  if (p>0){ 
     Serial.print("Received packet! Size: ");
-    Serial.println(packetSize);
-    int len = UDP.read(packet, 255);
-    if (len > 0)
-      packet[len] = '\0';
-
+    Serial.println(p);
+      char rdata[p+1];
+      UDP.read(rdata,p);
+      rdata[p] = '\0';
       Serial.print("packet Received:");
-      Serial.println(packet);
-
+      Serial.println(rdata);
+      r_p(String(rdata));      
+      
+    //reply to received packet
       UDP.beginPacket(UDP.remoteIP(), UDP.remotePort());
       UDP.write(reply);
       UDP.endPacket();
-      
-      
+         
   }
-  
+}
+
+void r_p(String a){
+  int r_p = a.toInt();
+  if (r_p == 0) {
+        digitalWrite(LED_BUILTIN, LOW);
+  }
+  else if (r_p ==1){
+    while(1){
+        digitalWrite(LED_BUILTIN, LOW);
+        delay(500);
+        digitalWrite(LED_BUILTIN, HIGH);
+        delay(500);
+    }
+  }
+  else if (r_p ==2){
+    while(1){   
+       digitalWrite(LED_BUILTIN, LOW);
+        delay(1000);
+        digitalWrite(LED_BUILTIN, HIGH);
+        delay(1000);
+    }
+  }
+  else if (r_p==3){
+    while(1){
+        digitalWrite(LED_BUILTIN, LOW);
+        delay(1500);
+        digitalWrite(LED_BUILTIN, HIGH);
+        delay(1500);
+    } 
+  }
 }
