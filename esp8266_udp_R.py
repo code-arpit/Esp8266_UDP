@@ -1,7 +1,7 @@
 import socket
 
 ip = '127.0.0.1' 
-port = 4293
+port = 4294
 message = b' hi from python'
     
 
